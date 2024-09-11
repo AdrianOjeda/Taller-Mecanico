@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 
 public class piezas_File {
-
+    int testing = 1;
     private DataOutputStream write;
     private DataInputStream read;
     private String path = "C:\\Proyecto\\piezas.txt";
