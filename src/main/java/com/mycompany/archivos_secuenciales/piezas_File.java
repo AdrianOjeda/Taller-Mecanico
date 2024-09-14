@@ -29,6 +29,7 @@ public class piezas_File {
             write.writeUTF(pi.getDescrp());
             write.writeInt(pi.getStock());
             write.close();
+            //prueba
         } catch (IOException ex) {
 
         }
