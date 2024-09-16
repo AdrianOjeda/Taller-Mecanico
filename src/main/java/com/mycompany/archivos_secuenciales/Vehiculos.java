@@ -8,7 +8,25 @@ public class Vehiculos {
     private String marca;
     private String modelo;
     private String fecha;
-
+    private String color;
+    private String nota;
+    
+    public String getColor(){
+        return color;
+    }
+    
+    public void setColor(String color){
+        this.color = color;
+    }
+    
+    public String getNota(){
+        return nota;
+    }
+    
+    public void setNota(String nota){
+        this.nota = nota;
+    }
+    
     public String getCliente() {
         return cliente;
     }

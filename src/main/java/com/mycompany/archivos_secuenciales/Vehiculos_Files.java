@@ -14,30 +14,40 @@ public class Vehiculos_Files {
     private DataInputStream read;
     private String path = "C:\\Proyecto\\vehiculos.txt";
 
-    Object[][] datos = new Object[6][100];
-    Object[][] eliminar = new Object[6][100];
+    Object[][] datos = new Object[8][100];
+    Object[][] eliminar = new Object[8][100];
 
     public void Guardar(Vehiculos vcs) throws FileNotFoundException {
-        try {
-            write = new DataOutputStream(new FileOutputStream(path, true));
-            write.writeUTF(vcs.getCliente());
-            write.writeInt(vcs.getId_vehiculo());
-            write.writeUTF(vcs.getMatricula());
-            write.writeUTF(vcs.getMarca());
-            write.writeUTF(vcs.getModelo());
-            write.writeUTF(vcs.getFecha());
-            write.close();
+    try {
+        write = new DataOutputStream(new FileOutputStream(path, true));
 
-        } catch (IOException ex) {
+        write.writeUTF(vcs.getCliente() != null ? vcs.getCliente() : "");
+        write.writeInt(vcs.getId_vehiculo());
+        write.writeUTF(vcs.getMatricula() != null ? vcs.getMatricula() : "");
+        write.writeUTF(vcs.getMarca() != null ? vcs.getMarca() : "");
+        write.writeUTF(vcs.getModelo() != null ? vcs.getModelo() : "");
+        write.writeUTF(vcs.getFecha() != null ? vcs.getFecha() : "");
+        write.writeUTF(vcs.getColor() != null ? vcs.getColor() : "");
+        write.writeUTF(vcs.getNota() != null ? vcs.getNota() : "");
 
+    } catch (IOException ex) {
+        ex.printStackTrace(); // Mejora el manejo de errores
+    } finally {
+        if (write != null) {
+            try {
+                write.close();
+            } catch (IOException ex) {
+                ex.printStackTrace(); // Manejo de errores al cerrar el flujo
+            }
         }
-
     }
+}
+
 
     public Vehiculos BuscarIdVehiculo(Vehiculos vcs) throws FileNotFoundException {
         Vehiculos aux = null;
         int id = 0;
-        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "";
+        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "", color = "", nota = "" ;
         try {
             read = new DataInputStream(new FileInputStream(path));
             while (true) {
@@ -48,7 +58,8 @@ public class Vehiculos_Files {
                 marca = read.readUTF();
                 modelo = read.readUTF();
                 fecha = read.readUTF();
-
+                color = read.readUTF();
+                nota = read.readUTF();
                 if (vcs.getId_vehiculo() == id) {
                     aux = new Vehiculos();
 
@@ -58,7 +69,8 @@ public class Vehiculos_Files {
                     aux.setMarca(marca);
                     aux.setModelo(modelo);
                     aux.setFecha(fecha);
-
+                    aux.setColor(color);
+                    aux.setNota(nota);
                 }
             }
         } catch (IOException ex) {
@@ -79,7 +91,7 @@ public class Vehiculos_Files {
     public Vehiculos BuscarMatricula(Vehiculos vcs) throws FileNotFoundException {
         Vehiculos aux = null;
         int id = 0;
-        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "";
+        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "", color = "", nota = "";
         try {
             read = new DataInputStream(new FileInputStream(path));
             while (true) {
@@ -90,6 +102,8 @@ public class Vehiculos_Files {
                 marca = read.readUTF();
                 modelo = read.readUTF();
                 fecha = read.readUTF();
+                color = read.readUTF();
+                nota = read.readUTF();
 
                 if (vcs.getMatricula().equals(matricula)) {
                     aux = new Vehiculos();
@@ -100,6 +114,8 @@ public class Vehiculos_Files {
                     aux.setMarca(marca);
                     aux.setModelo(modelo);
                     aux.setFecha(fecha);
+                    aux.setColor(color);
+                    aux.setNota(nota);
                 }
             }
         } catch (IOException ex) {
@@ -126,6 +142,8 @@ public class Vehiculos_Files {
                 datos[3][i] = read.readUTF();
                 datos[4][i] = read.readUTF();
                 datos[5][i] = read.readUTF();
+                datos[6][i] = read.readUTF();
+                datos[7][i] = read.readUTF();
                 i++;
             }
         } catch (IOException ex) {
@@ -150,6 +168,8 @@ public class Vehiculos_Files {
                 datos[3][z] = vcs.getMarca();
                 datos[4][z] = vcs.getModelo();
                 datos[5][z] = vcs.getFecha();
+                datos[6][z] = vcs.getColor();
+                datos[7][z] = vcs.getNota();
             }
             z++;
 
@@ -165,6 +185,8 @@ public class Vehiculos_Files {
                 write.writeUTF(datos[3][i].toString());
                 write.writeUTF(datos[4][i].toString());
                 write.writeUTF(datos[5][i].toString());
+                write.writeUTF(datos[6][i].toString());
+                write.writeUTF(datos[7][i].toString());
                 i++;
             }
         } catch (FileNotFoundException ex) {
@@ -194,6 +216,8 @@ public class Vehiculos_Files {
         datos[3][0] = "";
         datos[4][0] = "";
         datos[5][0] = "";
+        datos[6][0] = "";
+        datos[7][0] = "";
 
         try {
             read = new DataInputStream(new FileInputStream(path));
@@ -205,6 +229,8 @@ public class Vehiculos_Files {
                 eliminar[3][i] = read.readUTF();
                 eliminar[4][i] = read.readUTF();
                 eliminar[5][i] = read.readUTF();
+                eliminar[6][i] = read.readUTF();
+                eliminar[7][i] = read.readUTF();
 
                 System.out.println("ELIMINAR");
                 System.out.println(eliminar[0][i]);
@@ -232,6 +258,8 @@ public class Vehiculos_Files {
                 datos[3][j] = eliminar[3][z];
                 datos[4][j] = eliminar[4][z];
                 datos[5][j] = eliminar[5][z];
+                datos[6][j] = eliminar[6][z];
+                datos[7][j] = eliminar[7][z];
 
                 System.out.println("ELIMINAR SEGUNDA ETAPA");
                 System.out.println(eliminar[0][z]);
@@ -254,6 +282,8 @@ public class Vehiculos_Files {
                 write.writeUTF(datos[3][i].toString());
                 write.writeUTF(datos[4][i].toString());
                 write.writeUTF(datos[5][i].toString());
+                write.writeUTF(datos[6][i].toString());
+                write.writeUTF(datos[7][i].toString());
                 i++;
             }
 
@@ -275,7 +305,7 @@ public class Vehiculos_Files {
     public int getMax() {
         int maxId = -1; // Inicializar con un valor negativo para manejar el caso de archivo vacío
         int id = 0;
-        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "";
+        String cliente = "", matricula = "", marca = "", modelo = "", fecha = "", color = "", nota = "";
         try {
             read = new DataInputStream(new FileInputStream(path));
 
@@ -287,6 +317,8 @@ public class Vehiculos_Files {
                 marca = read.readUTF();
                 modelo = read.readUTF();
                 fecha = read.readUTF();
+                color = read.readUTF();
+                nota = read.readUTF();
 
                 if (id > maxId) {
                     maxId = id;
@@ -320,7 +352,8 @@ public class Vehiculos_Files {
                     marca = read.readUTF();
                     modelo = read.readUTF();
                     fecha = read.readUTF();
-
+                    color = read.readUTF();
+                    nota = read.readUTF();
                     if (id == i) {
                         idEncontrado = true;
                         break;
