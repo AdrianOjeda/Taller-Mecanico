@@ -2527,10 +2527,7 @@ public class main extends javax.swing.JFrame {
         vcs.setMatricula(txt_V_Matricula.getText());
         vcs = v.BuscarMatricula(vcs);
 
-        if (vcs != null) {
-            JOptionPane.showMessageDialog(null, "Esa matrícula ya existe");
-            return;
-        }
+
     } catch (FileNotFoundException ex) {
         ex.printStackTrace(); // Log del error
         JOptionPane.showMessageDialog(null, "Error al buscar la matrícula. Verifique el archivo.");
