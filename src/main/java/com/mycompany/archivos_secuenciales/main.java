@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
 import java.io.EOFException;
+import java.io.RandomAccessFile;
 
 
 public class main extends javax.swing.JFrame {
@@ -135,36 +136,40 @@ public class main extends javax.swing.JFrame {
     }
 }
 
-public void cb_R_vehiculos() {
-    String vl = "C:\\Proyecto\\vehiculos.txt";
-    cb_R_IdVehiculo.removeAllItems();
-    cb_R_IdVehiculo.addItem("Seleccione");
-    int id;
-    String item = "", cl = "", mat = "", marc = "", mo = "", fe = "", color = "", nota = "";
-    try (DataInputStream read = new DataInputStream(new FileInputStream(vl))) {
-        while (true) {
-            try {
-                cl = read.readUTF();
-                id = read.readInt();
-                mat = read.readUTF();
-                marc = read.readUTF();
-                mo = read.readUTF();
-                fe = read.readUTF();
-                color = read.readUTF();
-                nota = read.readUTF();
-                item = String.valueOf(id);
-                cb_R_IdVehiculo.addItem(item);
-            } catch (EOFException e) {
-                // Fin del archivo alcanzado
-                break;
+    public void cb_R_vehiculos() {
+        String vl = "C:\\Proyecto\\vehiculos.txt";
+        cb_R_IdVehiculo.removeAllItems();
+        cb_R_IdVehiculo.addItem("Seleccione");
+
+        String cl = "", mat = "", marc = "", mo = "", fe = "", color = "", nota = "";
+        int id;
+
+        try (RandomAccessFile read = new RandomAccessFile(vl, "r")) {
+            while (true) {
+                try {
+                    // Read data from specific positions if needed
+                    cl = read.readUTF();
+                    id = read.readInt();
+                    mat = read.readUTF();
+                    marc = read.readUTF();
+                    mo = read.readUTF();
+                    fe = read.readUTF();
+                    color = read.readUTF();
+                    nota = read.readUTF();
+
+                    // Add the vehicle ID to the combo box
+                    cb_R_IdVehiculo.addItem(String.valueOf(id));
+                } catch (EOFException e) {
+                    // End of file reached
+                    break;
+                }
             }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(); // Log the error
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Log the error
         }
-    } catch (FileNotFoundException ex) {
-        ex.printStackTrace(); // Log de error
-    } catch (IOException ex) {
-        ex.printStackTrace(); // Log de error
     }
-}
 
     public void cb_R_Pieza() {
         String pz = "C:\\Proyecto\\piezas.txt";
