@@ -2426,7 +2426,6 @@ public class main extends javax.swing.JFrame {
             vcs = v.BuscarIdVehiculo(vcs);
 
             if (vcs != null) {
-
                 cb_V_SeleccioneCliente.setSelectedItem(vcs.getCliente());
                 txt_V_IdVehiculo.setText(String.valueOf(vcs.getId_vehiculo()));
                 txt_V_Matricula.setText(vcs.getMatricula());
@@ -2440,6 +2439,7 @@ public class main extends javax.swing.JFrame {
                 try {
                     formato = fecha.parse(vcs.getFecha());
                 } catch (ParseException ex) {
+                    ex.printStackTrace(); // Log the exception or show an error message
                 }
                 jdt_V_Fecha.setDate(formato);
 
@@ -2458,9 +2458,14 @@ public class main extends javax.swing.JFrame {
                 btn_V_Cancelar.setEnabled(true);
             }
 
-        } catch (FileNotFoundException ex) {
-
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Log the exception or show an error message
+            JOptionPane.showMessageDialog(null, "Error al acceder al archivo.");
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace(); // Log the exception or show an error message
+            JOptionPane.showMessageDialog(null, "ID no válido. Asegúrese de que sea un número.");
         }
+
 
         txt_V_Buscar.setText("");
     }//GEN-LAST:event_btn_V_BuscarActionPerformed
@@ -2536,19 +2541,30 @@ public class main extends javax.swing.JFrame {
     }
 
     // Verificar si la matrícula ya existe
-    try {
-        vcs = new Vehiculos();
-        vcs.setMatricula(txt_V_Matricula.getText());
-        vcs = v.BuscarMatricula(vcs);
+        try {
+            vcs = new Vehiculos();
+            vcs.setMatricula(txt_V_Matricula.getText());
+            vcs = v.BuscarMatricula(vcs);
+
+            if (vcs != null) {
+                // Assuming you have code to handle the found vehicle
+                // For example:
+                cb_V_SeleccioneCliente.setSelectedItem(vcs.getCliente());
+                txt_V_IdVehiculo.setText(String.valueOf(vcs.getId_vehiculo()));
+                // Other UI updates here
+            } else {
+                //JOptionPane.showMessageDialog(null, null);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Log the error
+            JOptionPane.showMessageDialog(null, "Error al buscar la matrícula. Verifique el archivo.");
+        } catch (Exception ex) {
+            ex.printStackTrace(); // Catch other potential exceptions
+            JOptionPane.showMessageDialog(null, "Se ha producido un error inesperado.");
+        }
 
 
-    } catch (FileNotFoundException ex) {
-        ex.printStackTrace(); // Log del error
-        JOptionPane.showMessageDialog(null, "Error al buscar la matrícula. Verifique el archivo.");
-        return;
-    }
-
-    // Configurar el objeto Vehiculos
+        // Configurar el objeto Vehiculos
     vcs = new Vehiculos();
     vcs.setMatricula(txt_V_Matricula.getText());
     vcs.setCliente(cb_V_SeleccioneCliente.getSelectedItem().toString());
@@ -2573,10 +2589,11 @@ public class main extends javax.swing.JFrame {
             try {
                 v.Guardar(vcs);
                 JOptionPane.showMessageDialog(null, "Guardado correctamente");
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace(); // Log del error
+            } catch (IOException ex) {
+                ex.printStackTrace(); // Log the error
                 JOptionPane.showMessageDialog(null, "Error al guardar el vehículo. Verifique el archivo.");
             }
+
         } else {
             try {
                 v.Editar_Vehiculo(vcs);
