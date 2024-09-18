@@ -442,6 +442,7 @@ public class main extends javax.swing.JFrame {
         btn_V_Cancelar = new javax.swing.JButton();
         btn_V_Editar = new javax.swing.JButton();
         btn_V_Eliminar = new javax.swing.JButton();
+        btn_R_Salir1 = new javax.swing.JButton();
         pnlPiezas = new javax.swing.JPanel();
         lbl_P_Id = new javax.swing.JLabel();
         lbl_P_IdPieza = new javax.swing.JLabel();
@@ -1145,6 +1146,15 @@ public class main extends javax.swing.JFrame {
         pnlVehiculos.add(jPanel9);
         jPanel9.setBounds(10, 370, 1060, 420);
 
+        btn_R_Salir1.setText("Salir");
+        btn_R_Salir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_R_Salir1ActionPerformed(evt);
+            }
+        });
+        pnlVehiculos.add(btn_R_Salir1);
+        btn_R_Salir1.setBounds(910, 10, 100, 30);
+
         tpane.addTab("Vehículos", pnlVehiculos);
 
         pnlPiezas.setLayout(null);
@@ -1265,7 +1275,7 @@ public class main extends javax.swing.JFrame {
         jLabel12.setBounds(90, 10, 256, 256);
 
         pnlPiezas.add(jPanel7);
-        jPanel7.setBounds(477, 18, 695, 333);
+        jPanel7.setBounds(477, 18, 0, 0);
 
         btn_P_Salir.setText("Salir");
         btn_P_Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -1923,6 +1933,7 @@ public class main extends javax.swing.JFrame {
             txtPaterno.setText("");
             txtMaterno.setText("");
             txtUsername.setText("");
+            txtPsw.setText("");
             cbPerfil.setEditable(true);
             cbPerfil.setSelectedItem("");
             cbPerfil.setEditable(false);
@@ -1962,6 +1973,7 @@ public class main extends javax.swing.JFrame {
                 txtPaterno.setText(cto.getPaterno());
                 txtMaterno.setText(cto.getMaterno());
                 txtUsername.setText(cto.getUsername());
+                txtPsw.setText(cto.getPassword());
                 cbPerfil.setSelectedItem(cto.getPerfil());
                 txtDireccion.setText(cto.getDireccion());
 
@@ -1974,6 +1986,7 @@ public class main extends javax.swing.JFrame {
                 txtPaterno.setText("");
                 txtMaterno.setText("");
                 txtUsername.setText("");
+                txtPsw.setText("");
                 cbPerfil.setSelectedItem("");
                 txtDireccion.setText("");
 
@@ -2006,6 +2019,7 @@ public class main extends javax.swing.JFrame {
             cto.setTelefono(txtTelefono.getText());
             cto.setPaterno(txtPaterno.getText());
             cto.setMaterno(txtMaterno.getText());
+            cto.setPassword(txtPsw.getText());
             cto.setPerfil(cbPerfil.getSelectedItem().toString());
             cto.setDireccion(txtDireccion.getText());
 
@@ -2807,6 +2821,18 @@ public class main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_V_IdVehiculoActionPerformed
 
+    private void btn_R_Salir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_R_Salir1ActionPerformed
+        // TODO add your handling code here:
+        tpane.setSelectedIndex(0);
+
+        tpane.setEnabledAt(0, true);
+        tpane.setEnabledAt(1, false);
+        tpane.setEnabledAt(2, false);
+        tpane.setEnabledAt(3, false);
+        tpane.setEnabledAt(4, false);
+        tpane.setEnabledAt(5, false);
+    }//GEN-LAST:event_btn_R_Salir1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2873,6 +2899,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btn_R_Guardar;
     private javax.swing.JButton btn_R_Nuevo;
     private javax.swing.JButton btn_R_Salir;
+    private javax.swing.JButton btn_R_Salir1;
     private javax.swing.JButton btn_V_Buscar;
     private javax.swing.JButton btn_V_Cancelar;
     private javax.swing.JButton btn_V_Editar;
