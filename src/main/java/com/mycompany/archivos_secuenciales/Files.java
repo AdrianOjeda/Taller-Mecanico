@@ -11,6 +11,7 @@ public class Files {
     private RandomAccessFile file;
     private String path = "C:\\Proyecto\\archivo.txt";
 
+
     Object[][] datos = new Object[9][100];
     Object[][] eliminar = new Object[9][100];
 
