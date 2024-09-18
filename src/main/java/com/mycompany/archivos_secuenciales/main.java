@@ -2712,18 +2712,18 @@ public class main extends javax.swing.JFrame {
             pi.SetDescrp(txt_P_Descripcion.getText());
             pi.SetStock(Integer.parseInt(txt_P_Stock.getText()));
 
-            if (ban_piezas != true) {
-                pf.Guardar(pi);
-                JOptionPane.showMessageDialog(null, "Guardado con Éxito");
-            } else {
-                ban_piezas = false;
-                try {
+            try {
+                if (!ban_piezas) {
+                    pf.Guardar(pi); // Handle potential IOException
+                    JOptionPane.showMessageDialog(null, "Guardado con Éxito");
+                } else {
+                    ban_piezas = false;
                     pf.Editar(pi);
                     JOptionPane.showMessageDialog(null, "Editado con Éxito");
-                    System.out.println("SI");
-                } catch (IOException ex) {
-
                 }
+            } catch (IOException ex) {
+                ex.printStackTrace(); // Optional: display a meaningful error message
+                JOptionPane.showMessageDialog(null, "Error al guardar o editar la pieza");
             }
 
             Piezas_Deshabilitar();
