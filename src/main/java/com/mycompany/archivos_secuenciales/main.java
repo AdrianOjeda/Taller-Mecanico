@@ -112,29 +112,29 @@ public class main extends javax.swing.JFrame {
         return dato.matches("[0-9]*");
     }
 
-   public void cb_vehiculos() {
-    cb_V_SeleccioneCliente.removeAllItems();
-    cb_V_SeleccioneCliente.addItem("Seleccione");
-    String us = "", cl = "";
-    try (DataInputStream read = new DataInputStream(new FileInputStream(path))) {
-        while (true) {
-            try {
-                us = read.readUTF();
-                cl = read.readUTF();
-                if (us.equals(IdUs) || "0".equals(IdUs)) {
-                    cb_V_SeleccioneCliente.addItem(cl);
+    public void cb_vehiculos() {
+        cb_V_SeleccioneCliente.removeAllItems();
+        cb_V_SeleccioneCliente.addItem("Seleccione");
+        String us = "", cl = "";
+        try (DataInputStream read = new DataInputStream(new FileInputStream(path))) {
+            while (true) {
+                try {
+                    us = read.readUTF();
+                    cl = read.readUTF();
+                    if (us.equals(IdUs) || "0".equals(IdUs)) {
+                        cb_V_SeleccioneCliente.addItem(cl);
+                    }
+                } catch (EOFException e) {
+                    // Fin del archivo alcanzado
+                    break;
                 }
-            } catch (EOFException e) {
-                // Fin del archivo alcanzado
-                break;
             }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(); // Log de error
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Log de error
         }
-    } catch (FileNotFoundException ex) {
-        ex.printStackTrace(); // Log de error
-    } catch (IOException ex) {
-        ex.printStackTrace(); // Log de error
     }
-}
 
     public void cb_R_vehiculos() {
         String vl = "C:\\Proyecto\\vehiculos.txt";
@@ -172,31 +172,31 @@ public class main extends javax.swing.JFrame {
     }
 
     public void cb_R_Pieza() {
-        String pz = "C:\\Proyecto\\piezas.txt";
+        String pz = "C:\\Proyecto\\piezas.dat";
         cb_R_IdPieza.removeAllItems();
         cb_R_IdPieza.addItem("Seleccione");
-        int id = 0, stock = 0;
-        String item = "", des = "";
-        try {
-            read = new DataInputStream(new FileInputStream(pz));
-            while (true) {
-                id = read.readInt();
-                des = read.readUTF();
-                stock = read.readInt();
 
-                item = String.valueOf(id);
-                cb_R_IdPieza.addItem(item);
+        try (DataInputStream read = new DataInputStream(new FileInputStream(pz))) {
+            while (true) {
+                try {
+                    int id = read.readInt();
+                    String des = read.readUTF();
+                    int stock = read.readInt();
+
+                    // Add each pieza ID to the combo box
+                    cb_R_IdPieza.addItem(String.valueOf(id));
+                } catch (EOFException e) {
+                    // End of file reached
+                    break;
+                }
             }
         } catch (FileNotFoundException ex) {
-
+            ex.printStackTrace(); // Log the error
         } catch (IOException ex) {
-        }
-        try {
-            read.close();
-        } catch (IOException ex) {
-
+            ex.printStackTrace(); // Log the error
         }
     }
+
 
     public boolean txt_R_Control() {
         boolean ban = false;
@@ -295,13 +295,21 @@ public class main extends javax.swing.JFrame {
         jdt_S_Fecha.setDate(null);
         jdt_S_Fecha.cleanup();
 
-        int maxID = rf.getMax();
-        txt_R_IdReparacion.setText(String.valueOf(maxID));
+        try {
+            int maxID = rf.getMax(); // Here
+            txt_R_IdReparacion.setText(String.valueOf(maxID));
+        } catch (IOException e) {
+            // Handle the exception, e.g., log it or show an error message
+            e.printStackTrace();
+            // Optionally, set a default value or handle the error in a way appropriate to your application
+            txt_R_IdReparacion.setText("Error");
+        }
 
         txt_R_Falla.setText("");
         txt_R_IdReparacion.setText("");
         txt_R_ControlPiezas.setText("");
     }
+
 
     public void Piezas_Deshabilitar() {
         txt_P_Descripcion.setEditable(false);
@@ -475,12 +483,12 @@ public class main extends javax.swing.JFrame {
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 400, Short.MAX_VALUE)
         );
         jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+                jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 300, Short.MAX_VALUE)
         );
 
         lbl_V_Fecha2.setText("Color");
@@ -494,12 +502,12 @@ public class main extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 192, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
         );
 
         pnlLogin.add(jPanel2);
@@ -688,34 +696,34 @@ public class main extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(466, 466, 466)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(444, Short.MAX_VALUE))
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(12, 12, 12)
+                                                .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                                .addGap(466, 466, 466)
+                                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(444, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlUsuarios.add(jPanel4);
@@ -1238,31 +1246,31 @@ public class main extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btn_P_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_P_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_P_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_P_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_P_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btn_P_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_P_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_P_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_P_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_P_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_P_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_P_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_P_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_P_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_P_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(334, Short.MAX_VALUE))
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btn_P_Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn_P_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn_P_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn_P_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btn_P_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(334, Short.MAX_VALUE))
         );
 
         pnlPiezas.add(jPanel6);
@@ -1295,16 +1303,16 @@ public class main extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tpane, javax.swing.GroupLayout.PREFERRED_SIZE, 1028, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(tpane, javax.swing.GroupLayout.PREFERRED_SIZE, 1028, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tpane, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(tpane, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         pack();
@@ -1326,7 +1334,15 @@ public class main extends javax.swing.JFrame {
         cb_R_vehiculos();
         cb_R_Pieza();
 
-        int maxID = rf.getMax();
+        try {
+            int maxID = rf.getMax(); // Here
+            txt_R_IdReparacion.setText(String.valueOf(maxID));
+        } catch (IOException e) {
+            // Handle the exception, e.g., log it or show an error message
+            e.printStackTrace();
+            // Optionally, set a default value or handle the error in a way appropriate to your application
+            txt_R_IdReparacion.setText("Error");
+        }
 
         btn_R_Guardar.setEnabled(true);
         btn_R_Nuevo.setEnabled(false);
@@ -1336,42 +1352,47 @@ public class main extends javax.swing.JFrame {
 
         cb_R_IdVehiculo.setSelectedItem("");
         cb_R_IdPieza.setSelectedItem("");
-        txt_R_IdReparacion.setText(String.valueOf(maxID));
         txt_R_Falla.setText("");
         txt_R_ControlPiezas.setText("");
 
         jdt_E_Fecha.setDate(null);
         jdt_S_Fecha.setDate(null);
-
-    }//GEN-LAST:event_btn_R_NuevoActionPerformed
+    }
+//GEN-LAST:event_btn_R_NuevoActionPerformed
 
     private void btn_R_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_R_GuardarActionPerformed
 
+        // Validate Vehicle ID
         if ("Seleccione".equals(cb_R_IdVehiculo.getSelectedItem().toString())) {
             JOptionPane.showMessageDialog(null, "Eliga el Id del Vehiculo");
             return;
         }
 
+        // Validate Piece ID
         if ("Seleccione".equals(cb_R_IdPieza.getSelectedItem().toString())) {
             JOptionPane.showMessageDialog(null, "Eliga el Id de la pieza a usar");
             return;
         }
 
+        // Validate Failure Description
         if ("".equals(txt_R_Falla.getText())) {
             JOptionPane.showMessageDialog(null, "Ingrese la falla");
             return;
         }
 
+        // Validate Number of Pieces
         if ("".equals(txt_R_ControlPiezas.getText()) || !ValidaNum(txt_R_ControlPiezas.getText().trim())) {
             JOptionPane.showMessageDialog(null, "Ingrese la cantidad de piezas a usar");
             return;
         }
 
+        // Validate Piece Availability
         if (!txt_R_Control()) {
             JOptionPane.showMessageDialog(null, "Ingrese una cantidad posible, o en su defecto, escoja una pieza disponible");
             return;
         }
 
+        // Validate Dates
         if (jdt_E_Fecha.getDate() == null || jdt_S_Fecha.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Escoja una fecha del calendario");
             return;
@@ -1385,75 +1406,85 @@ public class main extends javax.swing.JFrame {
         Date fentrada = jdt_E_Fecha.getDate();
         Date fsalida = jdt_S_Fecha.getDate();
 
-        if ((fentrada.before(actual) || fentrada.equals(actual)) && (fsalida.before(actual) || fsalida.equals(actual))) {
-            if (fsalida.after(fentrada)) {
-                try {
-                    rep = new reparaciones();
-                    rep.setId_re(Integer.parseInt(txt_R_IdReparacion.getText()));
+        System.out.println("Fecha Entrada: " + fentrada);
+        System.out.println("Fecha Salida: " + fsalida);
+        System.out.println("Fecha Actual: " + actual);
 
-                    if (ban_reparaciones != true && rf.BuscarReparacion(rep) != null) {
-                        JOptionPane.showMessageDialog(null, "Ese Id de reparacion ya existe");
+        // Validate Date Range
+        if ((fentrada.before(actual) || fentrada.equals(actual)) && (fsalida.after(fentrada) || fsalida.equals(fentrada))) {
+            try {
+                rep = new reparaciones();
+                rep.setId_re(Integer.parseInt(txt_R_IdReparacion.getText()));
+
+                try {
+                    if (ban_reparaciones != true && rf.BuscarReparacion(rep) != null) { // Check if repair already exists
+                        JOptionPane.showMessageDialog(null, "Ese Id de reparación ya existe");
                         return;
                     }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al buscar la reparación: " + ex.getMessage());
+                    return;
+                }
 
-                    int aux = Integer.parseInt(txt_R_ControlPiezas.getText());
+                // Update Piece Stock
+                int aux = Integer.parseInt(txt_R_ControlPiezas.getText());
+                pi = new piezas();
+                pi.SetPiz(Integer.parseInt(cb_R_IdPieza.getSelectedItem().toString()));
+                pi = pf.BuscarPiezas(pi);
+                aux = (pi.getStock() - aux);
+                pi.SetStock(aux);
 
-                    pi = new piezas();
-                    pi.SetPiz(Integer.parseInt(cb_R_IdPieza.getSelectedItem().toString()));
-                    pi = pf.BuscarPiezas(pi);
-                    aux = (pi.getStock() - aux);
-                    pi.SetStock(aux);
+                try {
+                    pf.Editar(pi);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al editar la pieza: " + ex.getMessage());
+                }
 
-                    try {
-                        pf.Editar(pi);
-                    } catch (IOException ex) {
+                // Set Repair Details
+                rep.setId_ve(Integer.parseInt(cb_R_IdVehiculo.getSelectedItem().toString()));
+                rep.setId_pi(Integer.parseInt(cb_R_IdPieza.getSelectedItem().toString()));
+                rep.setFalla(txt_R_Falla.getText());
+                rep.setId_contrl(Integer.parseInt(txt_R_ControlPiezas.getText()));
+                rep.setFecha_e(fecha_E);
+                rep.setFecha_s(fecha_S);
 
-                    }
-
-                    rep.setId_ve(Integer.parseInt(cb_R_IdVehiculo.getSelectedItem().toString()));
-                    rep.setId_pi(Integer.parseInt(cb_R_IdPieza.getSelectedItem().toString()));
-                    rep.setFalla(txt_R_Falla.getText());
-                    rep.setId_contrl(Integer.parseInt(txt_R_ControlPiezas.getText()));
-                    rep.setFecha_e(fecha_E);
-                    rep.setFecha_s(fecha_S);
-
+                try {
                     if (ban_reparaciones != true) {
-                        rf.Guardar(rep);
+                        rf.Guardar(rep); // Save the new repair
                         JOptionPane.showMessageDialog(null, "Guardado con Éxito");
                     } else {
                         ban_reparaciones = false;
                         try {
-                            rf.Editar(rep);
-
+                            rf.Editar(rep); // Edit the existing repair
                             JOptionPane.showMessageDialog(null, "Editado con Éxito");
-                            System.out.println("SI");
                         } catch (IOException ex) {
-
+                            JOptionPane.showMessageDialog(null, "Error al editar la reparación: " + ex.getMessage());
                         }
                     }
-
-                    Reparaciones_Deshabilitar();
-
-                    btn_R_Guardar.setEnabled(false);
-                    btn_R_Nuevo.setEnabled(true);
-                    btn_R_Editar.setEnabled(false);
-                    btn_R_Eliminar.setEnabled(false);
-                    btn_R_Cancelar.setEnabled(false);
-
-                    cb_R_vehiculos();
-                    cb_R_Pieza();
-
-                } catch (FileNotFoundException ex) {
-
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al guardar la reparación: " + ex.getMessage());
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "La Fecha de Entrada tiene que ser anterior a la Fecha de Salida");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Elija una fecha posible");
-        }
 
-    }//GEN-LAST:event_btn_R_GuardarActionPerformed
+                Reparaciones_Deshabilitar();
+
+                btn_R_Guardar.setEnabled(false);
+                btn_R_Nuevo.setEnabled(true);
+                btn_R_Editar.setEnabled(false);
+                btn_R_Eliminar.setEnabled(false);
+                btn_R_Cancelar.setEnabled(false);
+
+                cb_R_vehiculos();
+                cb_R_Pieza();
+
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Archivo no encontrado: " + ex.getMessage());
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "La Fecha de Entrada tiene que ser anterior a la Fecha de Salida");
+        }
+    }
+
 
     private void btn_R_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_R_EditarActionPerformed
         Reparaciones_Habilitar();
@@ -1562,64 +1593,72 @@ public class main extends javax.swing.JFrame {
         try {
             rep = new reparaciones();
             rep.setId_re(Integer.parseInt(txt_R_Id.getText()));
-            rep = rf.BuscarReparacion(rep);
 
-            if (rep != null) {
-                cb_R_IdVehiculo.setSelectedItem(String.valueOf(rep.getId_ve()));
-                cb_R_IdPieza.setSelectedItem(String.valueOf(rep.getId_pi()));
-                txt_R_IdReparacion.setText(String.valueOf(rep.getId_re()));
-                txt_R_Falla.setText(rep.getFalla());
-                txt_R_ControlPiezas.setText(String.valueOf(rep.getId_contrl()));
+            try {
+                rep = rf.BuscarReparacion(rep); // This might throw IOException, handle it here
+                if (rep != null) {
+                    cb_R_IdVehiculo.setSelectedItem(String.valueOf(rep.getId_ve()));
+                    cb_R_IdPieza.setSelectedItem(String.valueOf(rep.getId_pi()));
+                    txt_R_IdReparacion.setText(String.valueOf(rep.getId_re()));
+                    txt_R_Falla.setText(rep.getFalla());
+                    txt_R_ControlPiezas.setText(String.valueOf(rep.getId_contrl()));
 
-                SimpleDateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
-                Date formato = null;
-                try {
-                    formato = fecha.parse(rep.getFecha_e());
-                } catch (ParseException ex) {
+                    SimpleDateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+                    Date formato = null;
+                    try {
+                        formato = fecha.parse(rep.getFecha_e());
+                    } catch (ParseException ex) {
+                        JOptionPane.showMessageDialog(null, "Error al parsear la fecha de entrada: " + ex.getMessage());
+                    }
+
+                    jdt_E_Fecha.setDate(formato);
+
+                    try {
+                        formato = fecha.parse(rep.getFecha_s());
+                    } catch (ParseException ex) {
+                        JOptionPane.showMessageDialog(null, "Error al parsear la fecha de salida: " + ex.getMessage());
+                    }
+
+                    jdt_S_Fecha.setDate(formato);
+
+                    btn_R_Guardar.setEnabled(false);
+                    btn_R_Nuevo.setEnabled(false);
+                    btn_R_Editar.setEnabled(true);
+                    btn_R_Eliminar.setEnabled(true);
+                    btn_R_Cancelar.setEnabled(true);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No existe ese ID");
+
+                    btn_R_Guardar.setEnabled(false);
+                    btn_R_Nuevo.setEnabled(true);
+                    btn_R_Editar.setEnabled(false);
+                    btn_R_Eliminar.setEnabled(false);
+                    btn_R_Cancelar.setEnabled(false);
+
+                    txt_R_Id.setText("");
+                    cb_R_IdVehiculo.setEditable(true);
+                    cb_R_IdPieza.setEditable(true);
+                    cb_R_IdVehiculo.setSelectedItem("Seleccione");
+                    cb_R_IdPieza.setSelectedItem("Seleccione");
+                    cb_R_IdPieza.setEditable(false);
+                    cb_R_IdVehiculo.setEditable(false);
+                    txt_R_IdReparacion.setText("");
+                    txt_R_Falla.setText("");
+                    txt_R_ControlPiezas.setText("");
+                    jdt_E_Fecha.setDate(null);
+                    jdt_S_Fecha.setDate(null);
                 }
 
-                jdt_E_Fecha.setDate(formato);
-
-                try {
-                    formato = fecha.parse(rep.getFecha_s());
-                } catch (ParseException ex) {
-                }
-
-                jdt_S_Fecha.setDate(formato);
-
-                btn_R_Guardar.setEnabled(false);
-                btn_R_Nuevo.setEnabled(false);
-                btn_R_Editar.setEnabled(true);
-                btn_R_Eliminar.setEnabled(true);
-                btn_R_Cancelar.setEnabled(true);
-
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe ese ID");
-
-                btn_R_Guardar.setEnabled(false);
-                btn_R_Nuevo.setEnabled(true);
-                btn_R_Editar.setEnabled(false);
-                btn_R_Eliminar.setEnabled(false);
-                btn_R_Cancelar.setEnabled(false);
-
-                txt_R_Id.setText("");
-                cb_R_IdVehiculo.setEditable(true);
-                cb_R_IdPieza.setEditable(true);
-                cb_R_IdVehiculo.setSelectedItem("Seleccione");
-                cb_R_IdPieza.setSelectedItem("Seleccione");
-                cb_R_IdPieza.setEditable(false);
-                cb_R_IdVehiculo.setEditable(false);
-                txt_R_IdReparacion.setText("");
-                txt_R_Falla.setText("");
-                txt_R_ControlPiezas.setText("");
-                jdt_E_Fecha.setDate(null);
-                jdt_S_Fecha.setDate(null);
-
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error al buscar la reparación: " + ex.getMessage());
             }
 
-        } catch (FileNotFoundException ex) {
-
+        } catch (Exception ex) { // Catch all other exceptions that are not specifically handled
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage());
         }
+
+
 
         txt_R_Id.setText("");
 
@@ -1768,26 +1807,26 @@ public class main extends javax.swing.JFrame {
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
         try {
-        if (jCheckBox1.isSelected()) {
-            // Cambia a FlatDarculaLaf cuando checkbox1 está seleccionado
-            FlatDarculaLaf.setup();
-            UIManager.setLookAndFeel(new FlatDarculaLaf());
+            if (jCheckBox1.isSelected()) {
+                // Cambia a FlatDarculaLaf cuando checkbox1 está seleccionado
+                FlatDarculaLaf.setup();
+                UIManager.setLookAndFeel(new FlatDarculaLaf());
 
-            // Actualiza la interfaz para que los cambios se apliquen inmediatamente
-            SwingUtilities.updateComponentTreeUI(this);
-            System.out.println("Tema FlatDarcula activado");
-        } else {
-            // Si se deselecciona el checkbox1, cambia a un tema claro (FlatIntelliJLaf)
-            FlatIntelliJLaf.setup();  // O puedes usar FlatLightLaf.setup();
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-            
-            // Actualiza la interfaz para que los cambios se apliquen inmediatamente
-            SwingUtilities.updateComponentTreeUI(this);
-            System.out.println("Tema FlatIntelliJ activado");
+                // Actualiza la interfaz para que los cambios se apliquen inmediatamente
+                SwingUtilities.updateComponentTreeUI(this);
+                System.out.println("Tema FlatDarcula activado");
+            } else {
+                // Si se deselecciona el checkbox1, cambia a un tema claro (FlatIntelliJLaf)
+                FlatIntelliJLaf.setup();  // O puedes usar FlatLightLaf.setup();
+                UIManager.setLookAndFeel(new FlatIntelliJLaf());
+
+                // Actualiza la interfaz para que los cambios se apliquen inmediatamente
+                SwingUtilities.updateComponentTreeUI(this);
+                System.out.println("Tema FlatIntelliJ activado");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
 
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
@@ -2525,22 +2564,22 @@ public class main extends javax.swing.JFrame {
     private void btn_V_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_V_GuardarActionPerformed
 
         // Validaciones de campos
-    if ("Seleccione".equals(cb_V_SeleccioneCliente.getSelectedItem().toString())) {
-        JOptionPane.showMessageDialog(null, "Eliga el cliente");
-        return;
-    }
+        if ("Seleccione".equals(cb_V_SeleccioneCliente.getSelectedItem().toString())) {
+            JOptionPane.showMessageDialog(null, "Eliga el cliente");
+            return;
+        }
 
-    if ("".equals(txt_V_Matricula.getText()) || "".equals(txt_V_Marca.getText()) || "".equals(txt_V_Modelo.getText())) {
-        JOptionPane.showMessageDialog(null, "Rellene los textos faltantes");
-        return;
-    }
+        if ("".equals(txt_V_Matricula.getText()) || "".equals(txt_V_Marca.getText()) || "".equals(txt_V_Modelo.getText())) {
+            JOptionPane.showMessageDialog(null, "Rellene los textos faltantes");
+            return;
+        }
 
-    if (jdt_V_Fecha.getDate() == null) {
-        JOptionPane.showMessageDialog(null, "Escoja una fecha del calendario");
-        return;
-    }
+        if (jdt_V_Fecha.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Escoja una fecha del calendario");
+            return;
+        }
 
-    // Verificar si la matrícula ya existe
+        // Verificar si la matrícula ya existe
         try {
             vcs = new Vehiculos();
             vcs.setMatricula(txt_V_Matricula.getText());
@@ -2565,62 +2604,62 @@ public class main extends javax.swing.JFrame {
 
 
         // Configurar el objeto Vehiculos
-    vcs = new Vehiculos();
-    vcs.setMatricula(txt_V_Matricula.getText());
-    vcs.setCliente(cb_V_SeleccioneCliente.getSelectedItem().toString());
-    vcs.setId_vehiculo(Integer.parseInt(txt_V_IdVehiculo.getText()));
-    vcs.setMatricula(txt_V_Matricula.getText());
-    vcs.setMarca(txt_V_Marca.getText());
-    vcs.setModelo(txt_V_Modelo.getText());
-    vcs.setColor(txt_V_Color.getText());
-    vcs.setNota(jTextArea1.getText());
+        vcs = new Vehiculos();
+        vcs.setMatricula(txt_V_Matricula.getText());
+        vcs.setCliente(cb_V_SeleccioneCliente.getSelectedItem().toString());
+        vcs.setId_vehiculo(Integer.parseInt(txt_V_IdVehiculo.getText()));
+        vcs.setMatricula(txt_V_Matricula.getText());
+        vcs.setMarca(txt_V_Marca.getText());
+        vcs.setModelo(txt_V_Modelo.getText());
+        vcs.setColor(txt_V_Color.getText());
+        vcs.setNota(jTextArea1.getText());
 
-    // Formatear la fecha
-    SimpleDateFormat dformat = new SimpleDateFormat("dd-MM-yyyy");
-    String date = dformat.format(jdt_V_Fecha.getDate());
-    vcs.setFecha(date);
+        // Formatear la fecha
+        SimpleDateFormat dformat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = dformat.format(jdt_V_Fecha.getDate());
+        vcs.setFecha(date);
 
-    // Validar fecha
-    Date fa = new Date();
-    Date s = jdt_V_Fecha.getDate();
+        // Validar fecha
+        Date fa = new Date();
+        Date s = jdt_V_Fecha.getDate();
 
-    if (s.before(fa) || s.equals(fa)) {
-        if (!ban_vehiculos) {
-            try {
-                v.Guardar(vcs);
-                JOptionPane.showMessageDialog(null, "Guardado correctamente");
-            } catch (IOException ex) {
-                ex.printStackTrace(); // Log the error
-                JOptionPane.showMessageDialog(null, "Error al guardar el vehículo. Verifique el archivo.");
+        if (s.before(fa) || s.equals(fa)) {
+            if (!ban_vehiculos) {
+                try {
+                    v.Guardar(vcs);
+                    JOptionPane.showMessageDialog(null, "Guardado correctamente");
+                } catch (IOException ex) {
+                    ex.printStackTrace(); // Log the error
+                    JOptionPane.showMessageDialog(null, "Error al guardar el vehículo. Verifique el archivo.");
+                }
+
+            } else {
+                try {
+                    v.Editar_Vehiculo(vcs);
+                    ban_vehiculos = false;
+                    JOptionPane.showMessageDialog(null, "Editado correctamente");
+                } catch (IOException ex) {
+                    ex.printStackTrace(); // Log del error
+                    JOptionPane.showMessageDialog(null, "Error al editar el vehículo. Verifique el archivo.");
+                }
             }
 
+            // Actualizar la interfaz de usuario
+            Vehiculos_Deshabilitar();
+            cb_vehiculos();
+            btn_V_Guardar.setEnabled(false);
+            btn_V_Nuevo.setEnabled(true);
+            btn_V_Editar.setEnabled(false);
+            btn_V_Eliminar.setEnabled(false);
+            btn_V_Cancelar.setEnabled(false);
+
+            txt_V_IdVehiculo.setText("");
         } else {
-            try {
-                v.Editar_Vehiculo(vcs);
-                ban_vehiculos = false;
-                JOptionPane.showMessageDialog(null, "Editado correctamente");
-            } catch (IOException ex) {
-                ex.printStackTrace(); // Log del error
-                JOptionPane.showMessageDialog(null, "Error al editar el vehículo. Verifique el archivo.");
-            }
+            JOptionPane.showMessageDialog(null, "Elija una fecha válida");
         }
-
-        // Actualizar la interfaz de usuario
-        Vehiculos_Deshabilitar();
-        cb_vehiculos();
-        btn_V_Guardar.setEnabled(false);
-        btn_V_Nuevo.setEnabled(true);
-        btn_V_Editar.setEnabled(false);
-        btn_V_Eliminar.setEnabled(false);
-        btn_V_Cancelar.setEnabled(false);
-
-        txt_V_IdVehiculo.setText("");
-    } else {
-        JOptionPane.showMessageDialog(null, "Elija una fecha válida");
-    }
     }//GEN-LAST:event_btn_V_GuardarActionPerformed
 
-    
+
     private void btn_V_NuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_V_NuevoActionPerformed
         Vehiculos_Habilitar();
         jdt_V_Fecha.setDate(null);
@@ -2853,36 +2892,36 @@ public class main extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
- 
-    
-    public static void main(String args[]) {
-    try {
-        // Establecer el tema Flat IntelliJ
-        FlatIntelliJLaf.setup();
 
-        // Alternativamente, si prefieres usar UIManager directamente:
-        // javax.swing.UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        
-        // Después de configurar el tema, puedes continuar con el resto del código
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    main myFrame = new main();
-                    myFrame.setVisible(true);
-                    myFrame.setResizable(false);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+
+    public static void main(String args[]) {
+        try {
+            // Establecer el tema Flat IntelliJ
+            FlatIntelliJLaf.setup();
+
+            // Alternativamente, si prefieres usar UIManager directamente:
+            // javax.swing.UIManager.setLookAndFeel(new FlatIntelliJLaf());
+
+            // Después de configurar el tema, puedes continuar con el resto del código
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    try {
+                        main myFrame = new main();
+                        myFrame.setVisible(true);
+                        myFrame.setResizable(false);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
-        });
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         //</editor-fold>
-       
-        
+
+
         /* Create and display the form */
-        
+
 
     }
 
