@@ -1,120 +1,126 @@
 
 package com.mycompany.archivos_secuenciales;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-
+import java.io.RandomAccessFile;
 
 public class VC_File {
-    private DataOutputStream write;
-    private DataInputStream read;
+    private RandomAccessFile raf;
     private String path = "C:\\Proyecto\\vc.txt";
-    
-    
-    
+
     public void guardar(vehiculo_cliente vc) {
         try {
-            write = new DataOutputStream(new FileOutputStream(path, true));
-            write.writeUTF(vc.getIdUsuario());
-            write.writeUTF(vc.getIdCliente());
-            write.close();
+            raf = new RandomAccessFile(path, "rw");
+            raf.seek(raf.length()); // Move to the end of the file
+            raf.writeUTF(vc.getIdUsuario());
+            raf.writeUTF(vc.getIdCliente());
         } catch (IOException e) {
             System.out.println("Error al guardar el cliente");
-        }
-    }
-    
-     public void eliminar(vehiculo_cliente vc) {
-        try {
-            read = new DataInputStream(new FileInputStream(path));
-            write = new DataOutputStream(new FileOutputStream("C:\\Proyecto\\temp.txt"));
-            
-            while (true) {
-                String us=read.readUTF();
-                String id = read.readUTF();
-                
-                if (!id.equals(vc.getIdCliente()) && !us.equals(vc.getIdUsuario())) {
-                    write.writeUTF(us);
-                    write.writeUTF(id);
-                }
-            }
-        } catch (EOFException e) {
-            // Fin del archivo, no se hace nada aquí
-        } catch (IOException e) {
-            System.out.println("Error al leer el archivo de clientes");
         } finally {
             try {
-                if (read != null) {
-                    read.close();
-                }
-                
-                if (write != null) {
-                    write.close();
+                if (raf != null) {
+                    raf.close();
                 }
             } catch (IOException e) {
                 System.out.println("Error al cerrar el archivo");
             }
         }
-        
-        // Renombrar el archivo temporal al archivo original
+    }
+
+    public void eliminar(vehiculo_cliente vc) {
+        RandomAccessFile tempFile = null;
         try {
-            java.io.File temp = new java.io.File("C:\\Proyecto\\temp.txt");
-            java.io.File original = new java.io.File(path);
-            original.delete();
-            temp.renameTo(original);
+            raf = new RandomAccessFile(path, "r");
+            tempFile = new RandomAccessFile("C:\\Proyecto\\temp.txt", "rw");
+
+            while (true) {
+                String us = raf.readUTF();
+                String id = raf.readUTF();
+
+                if (!id.equals(vc.getIdCliente()) || !us.equals(vc.getIdUsuario())) {
+                    tempFile.writeUTF(us);
+                    tempFile.writeUTF(id);
+                }
+            }
+        } catch (EOFException e) {
+            // End of file reached
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de clientes");
+        } finally {
+            try {
+                if (raf != null) {
+                    raf.close();
+                }
+                if (tempFile != null) {
+                    tempFile.close();
+                }
+            } catch (IOException e) {
+                System.out.println("Error al cerrar el archivo");
+            }
+        }
+
+        // Rename temp file to original file
+        try {
+            File temp = new File("C:\\Proyecto\\temp.txt");
+            File original = new File(path);
+            if (original.delete()) {
+                temp.renameTo(original);
+            } else {
+                System.out.println("Error al eliminar el archivo original");
+            }
         } catch (Exception e) {
             System.out.println("Error al renombrar el archivo");
         }
     }
-     
-      public void editar(vehiculo_cliente vc) {
+
+    public void editar(vehiculo_cliente vc) {
+        RandomAccessFile tempFile = null;
         try {
-            read = new DataInputStream(new FileInputStream(path));
-            write = new DataOutputStream(new FileOutputStream("C:\\Proyecto\\temp.txt"));
-            
+            raf = new RandomAccessFile(path, "r");
+            tempFile = new RandomAccessFile("C:\\Proyecto\\temp.txt", "rw");
+
             while (true) {
-                String us=read.readUTF();
-                String id = read.readUTF();
-                
+                String us = raf.readUTF();
+                String id = raf.readUTF();
+
                 if (id.equals(vc.getIdCliente()) && us.equals(vc.getIdUsuario())) {
-                    write.writeUTF(us);
-                    write.writeUTF(id);
+                    tempFile.writeUTF(vc.getIdUsuario());
+                    tempFile.writeUTF(vc.getIdCliente());
                 } else {
-                    write.writeUTF(us);
-                    write.writeUTF(id);
+                    tempFile.writeUTF(us);
+                    tempFile.writeUTF(id);
                 }
             }
         } catch (EOFException e) {
-            // Fin del archivo, no se hace nada aquí
+            // End of file reached
         } catch (IOException e) {
             System.out.println("Error al leer el archivo de clientes");
         } finally {
             try {
-                if (read != null) {
-                    read.close();
+                if (raf != null) {
+                    raf.close();
                 }
-                
-                if (write != null) {
-                    write.close();
+                if (tempFile != null) {
+                    tempFile.close();
                 }
             } catch (IOException e) {
                 System.out.println("Error al cerrar el archivo");
             }
         }
-        
-        // Renombrar el archivo temporal al archivo original
+
+        // Rename temp file to original file
         try {
-            java.io.File temp = new java.io.File("C:\\Proyecto\\temp.txt");
-            java.io.File original = new java.io.File(path);
-            original.delete();
-            temp.renameTo(original);
+            File temp = new File("C:\\Proyecto\\temp.txt");
+            File original = new File(path);
+            if (original.delete()) {
+                temp.renameTo(original);
+            } else {
+                System.out.println("Error al eliminar el archivo original");
+            }
         } catch (Exception e) {
             System.out.println("Error al renombrar el archivo");
         }
     }
-      
-    
 }
